@@ -1,0 +1,60 @@
+name: Site preview
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  site-preview:
+    name: Publish site preview
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "refs/pull/${{ github.event.number }}/merge"
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+
+      - name: Build Jekyll website
+        run: bundler exec jekyll build
+
+      - name: Install Netlify CLI
+        run: npm install --location=global netlify-cli@17.x.x
+
+      - name: Deploy Preview to Netlify
+        run: |
+          netlify deploy \
+            --alias="${GITHUB_REPOSITORY#*/}-${{ github.event.number }}" \
+            --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
+            --dir="_site" \
+            --site=${{ vars.NETLIFY_PREVIEW_APP_SITE_ID }}
+
+      - name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "Preview url: https://"
+
+      - name: Add Netlify link PR comment
+        uses: actions/github-script@v7
+        if: steps.find-comment.outputs.comment-id == ''
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const hostnameSuffix = "compiler-previews.netlify.app"
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview url: https://${context.repo.repo}-${{ github.event.number }}--${hostnameSuffix}`,
+            })
