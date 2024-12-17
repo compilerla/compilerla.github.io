@@ -1,0 +1,10 @@
+@import url("https://compiler.la/styles/base.css");
+
+:root {
+  --brand-primary-purple: #defdef;
+  --bs-code-color: var(--brand-primary-purple);
+}
+
+p {
+  margin-top: 1rem;
+}
