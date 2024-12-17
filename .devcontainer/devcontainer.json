@@ -1,0 +1,28 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/jekyll
+{
+  "name": "compilerla/compilerla.github.io",
+  "dockerComposeFile": "../compose.yml",
+  "service": "site",
+  "workspaceFolder": "/home/compiler/site",
+  "postAttachCommand": ["/bin/bash", ".devcontainer/postAttach.sh"],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        }
+      },
+      "extensions": [
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "redhat.vscode-xml",
+        "sissel.shopify-liquid"
+      ]
+    }
+  }
+}
