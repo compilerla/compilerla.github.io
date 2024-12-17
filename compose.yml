@@ -1,0 +1,11 @@
+name: compilerla.github.io
+
+services:
+  site:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    image: compiler/compilerla.github.io:site
+    command: sleep infinity
+    volumes:
+      - .:/home/compiler/site

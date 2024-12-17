@@ -1,0 +1,11 @@
+description: |
+  Software built by humans, for humans, in LA.
+  Compiler is a woman-owned software consultancy that’s passionate about making
+  government tech solutions easy-to-use and accessible for all.
+github:
+  is_project_page: true
+locale: en
+plugins:
+  - jekyll-seo-tag
+title: Compiler's Technical Documentation
+url: https://docs.compiler.la
